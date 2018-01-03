@@ -5,8 +5,12 @@
  */
 package GUI;
 
+import java.awt.HeadlessException;
+import java.awt.event.ActionEvent;
+import java.io.File;
 import java.util.List;
 import javax.swing.ImageIcon;
+import javax.swing.JOptionPane;
 import main.ImageViewer1;
 
 /**
@@ -17,12 +21,12 @@ public class ImageViewerUI extends javax.swing.JFrame {
     String path;
     List<ImageIcon> imageList;
     int index;
+    File dir = ImageViewer1.getDir();
 
     /**
      * Creates new form ImageViewerUI
      */
     public ImageViewerUI() {
-        path = ImageViewer1.getDir();
         imageList = ImageViewer1.getImageList();
         index = 0;
         initComponents();
@@ -40,9 +44,12 @@ public class ImageViewerUI extends javax.swing.JFrame {
         Atras = new javax.swing.JButton();
         Adelante = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
+        jMenuBar1 = new javax.swing.JMenuBar();
+        jMenu1 = new javax.swing.JMenu();
+        changeDir = new javax.swing.JMenuItem();
+        exit = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setPreferredSize(new java.awt.Dimension(1920, 1080));
         setResizable(false);
         setSize(new java.awt.Dimension(1920, 1080));
 
@@ -63,6 +70,30 @@ public class ImageViewerUI extends javax.swing.JFrame {
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel1.setIcon(imageList.get(index));
 
+        jMenu1.setText("Opciones");
+
+        changeDir.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_D, java.awt.event.InputEvent.CTRL_MASK));
+        changeDir.setText("Cambiar directorio");
+        changeDir.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                changeDirActionPerformed(evt);
+            }
+        });
+        jMenu1.add(changeDir);
+
+        exit.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_ESCAPE, 0));
+        exit.setText("Salir");
+        exit.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                exitActionPerformed(evt);
+            }
+        });
+        jMenu1.add(exit);
+
+        jMenuBar1.add(jMenu1);
+
+        setJMenuBar(jMenuBar1);
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -74,7 +105,7 @@ public class ImageViewerUI extends javax.swing.JFrame {
                 .addComponent(Adelante)
                 .addGap(750, 750, 750))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addGap(160, 160, 160)
+                .addContainerGap(169, Short.MAX_VALUE)
                 .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 1600, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(160, 160, 160))
         );
@@ -94,18 +125,46 @@ public class ImageViewerUI extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void AtrasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_AtrasActionPerformed
-        System.out.println(imageList.get(index));
         if (index == 0) index = imageList.size() - 1;
         else index--;
         jLabel1.setIcon(imageList.get(index));
     }//GEN-LAST:event_AtrasActionPerformed
 
     private void AdelanteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_AdelanteActionPerformed
-        System.out.println(imageList.get(index));
         if (index == imageList.size() - 1) index = 0;
         else index++;
         jLabel1.setIcon(imageList.get(index));
     }//GEN-LAST:event_AdelanteActionPerformed
+
+    private void exitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_exitActionPerformed
+        System.exit(0);// TODO add your handling code here:
+    }//GEN-LAST:event_exitActionPerformed
+
+    private void changeDirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_changeDirActionPerformed
+        File aux = dir;
+        int indexAux = index;
+        try {
+            
+            dir = new File(JOptionPane.showInputDialog(this, "Introduzca el nuevo directorio", "Nuevo directorio", JOptionPane.PLAIN_MESSAGE));
+            if (!dir.isDirectory()){
+                dir = aux;
+                JOptionPane.showMessageDialog(this, "El directorio no existe", "Error en el directorio", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+            imageList = ImageViewer1.getImages(dir);
+            index = 0;
+            jLabel1.setIcon(imageList.get(index));
+        } catch (Exception e){
+            JOptionPane.showMessageDialog(this, "El directorio no tiene imágenes de formatos soportados (gif, png, jpeg, jpg)", "Error en el directorio", JOptionPane.ERROR_MESSAGE);
+            dir = aux;
+            imageList = ImageViewer1.getImages(dir);
+            index = indexAux;
+            
+            jLabel1.setIcon(imageList.get(index));
+        }   
+        
+        // TODO add your handling code here:
+    }//GEN-LAST:event_changeDirActionPerformed
 
     /**
      * @param args the command line arguments
@@ -153,7 +212,11 @@ public class ImageViewerUI extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton Adelante;
     private javax.swing.JButton Atras;
+    private javax.swing.JMenuItem changeDir;
+    private javax.swing.JMenuItem exit;
     private static javax.swing.JLabel jLabel1;
+    private javax.swing.JMenu jMenu1;
+    private javax.swing.JMenuBar jMenuBar1;
     // End of variables declaration//GEN-END:variables
 
     /*public int getLabelHeight() {

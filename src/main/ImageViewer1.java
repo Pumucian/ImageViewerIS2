@@ -22,11 +22,13 @@ public class ImageViewer1 {
     static double aux2;
     static int newW, newH;
 
-    // array of supported extensions (use a List if you prefer)
+    
+
+    
     static final String[] EXTENSIONS = new String[]{
-        "gif", "png", "bmp", "jpg" // and other formats you need
+        "gif", "png", "jpeg", "jpg" // Se podrían añadir mas formatos¿?
     };
-    // filter to identify images based on their extensions
+    
     static FilenameFilter IMAGE_FILTER = (final File dir1, final String name) -> {
         for (final String ext : EXTENSIONS) {
             if (name.endsWith("." + ext)) {
@@ -38,12 +40,11 @@ public class ImageViewer1 {
 
     public static void main(String[] args) {
         getImages(dir);
-        System.out.println(imageList.size());
         ImageViewerUI UI = new ImageViewerUI();
         UI.setVisible(true);
     }
     
-    public static void getImages(File dir){
+    public static List<ImageIcon> getImages(File dir){
         imageList = new ArrayList<>();
         if (dir.isDirectory()) { // make sure it's a directory
             for (final File f : dir.listFiles(IMAGE_FILTER)) {
@@ -87,13 +88,15 @@ public class ImageViewer1 {
                 }
             }
         }
+        return imageList;
     }
     
-    public static String getDir(){
-        return dir.getPath();
-    }
     
     public static List<ImageIcon> getImageList(){
         return imageList;
+    }
+    
+    public static File getDir() {
+        return dir;
     }
 }
