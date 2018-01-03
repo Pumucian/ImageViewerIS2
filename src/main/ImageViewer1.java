@@ -10,12 +10,13 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
+import javax.swing.JOptionPane;
 
 public class ImageViewer1 {
 
     // File representing the folder that you select using a FileChooser
     static List<ImageIcon> imageList;
-    static File dir = new File("C:\\Users\\fali0\\Desktop");
+    static File dir;
     static String imageName;
     static ImageIcon image;
     static Image aux;
@@ -39,6 +40,7 @@ public class ImageViewer1 {
     };
 
     public static void main(String[] args) {
+        start();
         getImages(dir);
         ImageViewerUI UI = new ImageViewerUI();
         UI.setVisible(true);
@@ -91,6 +93,18 @@ public class ImageViewer1 {
         return imageList;
     }
     
+    public static void start(){
+        try{
+            dir = new File(JOptionPane.showInputDialog(null, "Introduzca el directorio", "Nuevo directorio", JOptionPane.PLAIN_MESSAGE));
+            if (!dir.isDirectory()){
+                JOptionPane.showMessageDialog(null, "El directorio no existe", "Error en el directorio", JOptionPane.ERROR_MESSAGE);
+                start();
+            }
+        } catch (Exception e){
+            JOptionPane.showMessageDialog(null, "El directorio no tiene imágenes de formatos soportados (gif, png, jpeg, jpg)", "Error en el directorio", JOptionPane.ERROR_MESSAGE);
+            start();
+        }
+    }
     
     public static List<ImageIcon> getImageList(){
         return imageList;
